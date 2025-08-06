@@ -1,0 +1,146 @@
+@startuml
+!theme vibrant
+skinparam rectangleFontSize 9
+skinparam rectangleFontStyle bold
+
+package "Landing Page" {
+  rectangle "index.html" as LandingPage {
+    <b>-- Navigation --</b>
+    navBrand: "BookMyJunk"
+    customerLoginLink: "Customer Login"
+    adminLoginLink: "Admin Login"
+    getStartedButton: "Get Started"
+
+    <b>-- Hero Section --</b>
+    heroTitle: "Schedule Your Junk Pickup Today"
+    heroSubtitle: "Hassle-free, eco-friendly junk removal."
+    bookNowButton: "Book Now"
+  }
+}
+
+package "Customer Authentication" {
+  rectangle "customer/login.html" as CustomerLoginPage {
+    <b>-- Form Elements --</b>
+    usernameField: "Email Address"
+    passwordField: "Password"
+    loginButton: "Login"
+    signupLink: "Don't have an account? Sign Up"
+    forgotPasswordLink: "Forgot Password?"
+  }
+
+  rectangle "customer/signup.html" as CustomerSignupPage {
+    <b>-- Form Elements --</b>
+    fullNameField: "Full Name"
+    emailField: "Email Address"
+    passwordField: "Password"
+    confirmPasswordField: "Confirm Password"
+    createAccountButton: "Create Account"
+    loginLink: "Already have an account? Login"
+  }
+}
+
+package "Customer Area" {
+  rectangle "customer/dashboard.html" as CustomerDashboardPage {
+    <b>-- Header --</b>
+    welcomeMessage: "Welcome back, [Username]!"
+    bookPickupButton: "Book a Pickup"
+
+    <b>-- Statistics --</b>
+    statsGrid: "Upcoming Pickups", "Total Pickups", "Total Spent"
+
+    <b>-- Content --</b>
+    upcomingPickupsList: "Your Upcoming Pickups"
+    pickupHistoryList: "Recent Pickup History"
+  }
+
+  rectangle "customer/book-pickup.html" as BookPickupPage {
+    <b>-- Booking Form --</b>
+    pickupAddressField: "Pickup Address"
+    pickupDateField: "Pickup Date"
+    pickupTimeField: "Pickup Time"
+    junkTypeSelect: "Junk Type"
+    quantityField: "Quantity/Description"
+    imageUpload: "Upload Image (Optional)"
+    notesField: "Additional Notes (Optional)"
+    submitButton: "Submit Booking"
+    cancelButton: "Cancel"
+  }
+
+  rectangle "customer/bookings.html" as MyBookingsPage {
+    <b>-- Filters --</b>
+    searchInput: "Search bookings..."
+    statusFilter: "All Status", "Pending", ...
+    dateFilter: "All Dates", "Today", ...
+
+    <b>-- Bookings Table --</b>
+    bookingsTable: "Date, Junk Type, Address, Status, ..."
+    cancelButton: "Cancel"
+  }
+
+  rectangle "customer/profile.html" as ProfilePage {
+    <b>-- Personal Info Form --</b>
+    fullNameField: "Full Name"
+    emailField: "Email Address"
+    updateProfileButton: "Update Profile"
+
+    <b>-- Change Password Form --</b>
+    currentPasswordField: "Current Password"
+    newPasswordField: "New Password"
+    confirmNewPasswordField: "Confirm New Password"
+    changePasswordButton: "Change Password"
+
+    <b>-- Danger Zone --</b>
+    deleteAccountButton: "Delete Account"
+  }
+}
+
+package "Admin Area" {
+  rectangle "admin/login.html" as AdminLoginPage {
+    <b>-- Form Elements --</b>
+    usernameField: "Email Address"
+    passwordField: "Password"
+    loginButton: "Login to Admin Panel"
+  }
+
+  rectangle "admin/dashboard.html" as AdminDashboardPage {
+    <b>-- Statistics --</b>
+    statsGrid: "Pickups Today", "Pending Requests", "Completed This Week", "Revenue This Week"
+
+    <b>-- Content --</b>
+    recentBookingsList: "Recent Bookings"
+    quickActions: "Manage Bookings", "User Management", ...
+    todaysScheduleTable: "Today's Schedule"
+  }
+
+  rectangle "admin/bookings.html" as AdminBookingsPage {
+    <b>-- Filters --</b>
+    searchInput: "Search by customer name..."
+    statusFilter: "All Status", "Pending", ...
+    dateFilter: "All Dates", "Today", ...
+    junkTypeFilter: "All Types", "Furniture", ...
+
+    <b>-- Bookings Table --</b>
+    bookingsTable: "Customer, Date, Junk Type, Address, Status, ..."
+    statusSelect: "Update Status Dropdown"
+    viewButton: "View"
+    editButton: "Edit"
+    deleteButton: "Delete"
+  }
+}
+
+' --- Navigation Flow ---
+LandingPage --> CustomerLoginPage
+LandingPage --> AdminLoginPage
+LandingPage --> CustomerSignupPage
+
+CustomerLoginPage --> CustomerDashboardPage
+CustomerSignupPage --> CustomerLoginPage
+
+CustomerDashboardPage --> BookPickupPage
+CustomerDashboardPage --> MyBookingsPage
+CustomerDashboardPage --> ProfilePage
+
+AdminLoginPage --> AdminDashboardPage
+AdminDashboardPage --> AdminBookingsPage
+
+@enduml

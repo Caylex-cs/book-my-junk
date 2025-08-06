@@ -1,0 +1,38 @@
+@startuml
+!theme vibrant
+title Customer Signup Sequence Diagram
+
+actor User as "New Customer"
+participant Browser as "Frontend (signup.js)"
+participant AuthController as "Backend (authController.js)"
+participant User as "User Model"
+database Database
+
+User -> Browser: Fills out signup form (email, password)
+User -> Browser: Clicks "Create Account" button
+Browser -> AuthController: POST /api/auth/signup with form data
+activate AuthController
+
+AuthController -> User: createUser(username, password, 'customer')
+activate User
+User -> Database: INSERT INTO users (username, password, role) VALUES (?, ?, 'customer')
+activate Database
+alt if username already exists
+    Database --> User: Returns SQLITE_CONSTRAINT error
+    deactivate Database
+    User --> AuthController: Returns error
+    AuthController -> Browser: 409 Conflict response
+    deactivate User
+    deactivate AuthController
+else
+    Database --> User: Returns success and new user ID
+    deactivate Database
+    User --> AuthController: Returns new user object
+    deactivate User
+    AuthController -> Browser: 201 Created response
+    deactivate AuthController
+end
+
+Browser -> User: Shows success message and redirects to Login page (login.html)
+
+@enduml

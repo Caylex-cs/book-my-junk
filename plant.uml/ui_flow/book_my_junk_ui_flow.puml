@@ -1,0 +1,67 @@
+@startuml
+!theme vibrant
+title Book My Junk - UI Flow Diagram
+
+start
+
+if (User is new?) then (yes)
+  :Visits Home Page;
+  :Clicks "Sign Up";
+  :Fills out signup form;
+  :Submits form;
+  if (Signup successful?) then (yes)
+    :Redirected to Login Page;
+  else (no)
+    :Shows error on Signup Page;
+    stop
+  endif
+else (no)
+  :Visits Home Page;
+endif
+
+:Visits Login Page;
+:Enters credentials;
+:Submits login form;
+
+if (Login successful?) then (yes)
+  if (User is Admin?) then (yes)
+    partition "Admin Flow" {
+      :Redirected to Admin Dashboard;
+      :Views all bookings;
+      :Can manage bookings (update/delete);
+      :Logs out;
+    }
+  else (no)
+    partition "Customer Flow" {
+      :Redirected to Customer Dashboard;
+      :Views personal dashboard;
+      if (Wants to book pickup?) then (yes)
+        :Goes to Book Pickup Page;
+        :Fills out booking form;
+        :Submits booking;
+        if (Booking successful?) then (yes)
+          :Redirected to My Bookings Page;
+        else (no)
+          :Shows error on Booking Page;
+        endif
+      else (no)
+        if (Wants to see bookings?) then (yes)
+          :Goes to My Bookings Page;
+          :Views list of personal bookings;
+        else (no)
+          :Goes to Profile Page;
+          :Views and edits profile information;
+        endif
+      endif
+      :Logs out;
+    }
+  endif
+else (no)
+  :Shows error on Login Page;
+  stop
+endif
+
+:Redirected to Home Page;
+
+stop
+@enduml

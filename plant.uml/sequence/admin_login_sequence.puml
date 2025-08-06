@@ -1,0 +1,49 @@
+@startuml
+!theme vibrant
+title Admin Login Sequence Diagram
+
+actor User as "Admin"
+participant Browser as "Frontend (login.js)"
+participant AuthController as "Backend (authController.js)"
+participant User as "User Model"
+participant bcrypt
+participant jwt as "jsonwebtoken"
+database Database
+
+User -> Browser: Enters username and password
+User -> Browser: Clicks "Login" button
+Browser -> AuthController: POST /api/auth/admin/login with credentials
+activate AuthController
+
+AuthController -> User: findUserByUsername(username)
+activate User
+User -> Database: SELECT * FROM users WHERE username = ?
+activate Database
+Database --> User: Returns user record
+deactivate Database
+User --> AuthController: Returns user object
+deactivate User
+
+AuthController -> AuthController: Checks if user.role is 'admin'
+alt if role is not 'admin'
+    AuthController -> Browser: 403 Forbidden response
+    deactivate AuthController
+end
+
+AuthController -> bcrypt: compareSync(password, user.password)
+activate bcrypt
+bcrypt --> AuthController: Returns true (password is valid)
+deactivate bcrypt
+
+AuthController -> jwt: sign({ id, role }, secret, { expiresIn })
+activate jwt
+jwt --> AuthController: Returns JWT token
+deactivate jwt
+
+AuthController -> Browser: 200 OK with { auth: true, token }
+deactivate AuthController
+
+Browser -> Browser: Stores token in localStorage
+Browser -> User: Redirects to Admin Dashboard (dashboard.html)
+
+@enduml

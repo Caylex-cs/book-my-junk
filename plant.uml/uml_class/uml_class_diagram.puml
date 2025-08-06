@@ -1,0 +1,131 @@
+@startuml
+allowmixing
+!theme vibrant
+title Book My Junk - UML Class Diagram
+
+package "Frontend" {
+  class CustomerUI {
+    + bookPickup()
+    + viewBookings()
+    + manageProfile()
+    + login()
+    + signup()
+  }
+
+  class AdminUI {
+    + viewDashboard()
+    + manageAllBookings()
+    + updateUserStatus()
+    + login()
+  }
+}
+
+package "Backend" {
+  package "Routes" {
+    class AuthRoutes
+    class UserRoutes
+    class BookingRoutes
+    class AdminRoutes
+  }
+
+  package "Middleware" {
+    class AuthMiddleware {
+      + protect()
+      + isAdmin()
+    }
+  }
+
+  package "Controllers" {
+    class AuthController {
+      + signup(req, res)
+      + adminLogin(req, res)
+      + customerLogin(req, res)
+    }
+
+    class UserController {
+      + getUserProfile(req, res)
+      + updateUserProfile(req, res)
+      + changePassword(req, res)
+      + deleteUserAccount(req, res)
+      + getDashboardStats(req, res)
+    }
+
+    class BookingController {
+      + createBooking(req, res)
+      + getBookings(req, res)
+      + updateBooking(req, res)
+      + deleteBooking(req, res)
+    }
+
+    class AdminController {
+      + getAllBookings(req, res)
+      + updateBookingStatus(req, res)
+      + getDashboardStats(req, res)
+    }
+  }
+
+  package "Models" {
+    class User {
+      - id: INTEGER
+      - username: STRING
+      - password: STRING
+      - role: STRING
+      + createUser()
+      + findUserByUsername()
+      + getUserById()
+      + updateUser()
+      + updatePassword()
+      + deleteUser()
+    }
+
+    class Booking {
+      - id: INTEGER
+      - userId: INTEGER
+      - junkType: STRING
+      - pickupDate: DATETIME
+      - address: STRING
+      - status: STRING
+      + createBooking()
+      + getBookingsByUserId()
+      + updateBooking()
+      + deleteBooking()
+    }
+  }
+}
+
+package "Database" {
+  database SQLite
+}
+
+' --- Relationships ---
+
+CustomerUI ..> AuthRoutes
+CustomerUI ..> UserRoutes
+CustomerUI ..> BookingRoutes
+
+AdminUI ..> AuthRoutes
+AdminUI ..> AdminRoutes
+
+AuthRoutes ..> AuthController
+UserRoutes ..> UserController
+BookingRoutes ..> BookingController
+AdminRoutes ..> AdminController
+
+AuthRoutes ..> AuthMiddleware
+UserRoutes ..> AuthMiddleware
+BookingRoutes ..> AuthMiddleware
+AdminRoutes ..> AuthMiddleware
+
+AuthController ..> User
+UserController ..> User
+UserController ..> Booking
+BookingController ..> Booking
+AdminController ..> Booking
+AdminController ..> User
+
+User --|> SQLite
+Booking --|> SQLite
+
+User "1" -- "0..*" Booking : has
+
+@enduml

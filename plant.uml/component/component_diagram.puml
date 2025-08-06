@@ -1,0 +1,79 @@
+@startuml
+!theme vibrant
+title Book My Junk - Component Diagram
+
+package "Client-Side" {
+  actor Customer
+  actor Admin
+
+  node "Web Browser" as Browser {
+    component [Customer UI] as CUI
+    component [Admin UI] as AUI
+  }
+}
+
+package "Server-Side (Node.js)" {
+  node "Web Server" as Server {
+    component [Express App] as App
+
+    package "API Routes" {
+      component [Auth Routes] as AuthR
+      component [User Routes] as UserR
+      component [Booking Routes] as BookingR
+      component [Admin Routes] as AdminR
+    }
+
+    package "Business Logic" {
+      component [Auth Controller] as AuthC
+      component [User Controller] as UserC
+      component [Booking Controller] as BookingC
+      component [Admin Controller] as AdminC
+    }
+
+    package "Data Access" {
+      component [User Model] as UserM
+      component [Booking Model] as BookingM
+    }
+
+    component [Auth Middleware] as AuthMW
+  }
+}
+
+package "Database" {
+  database "SQLite DB" as DB
+}
+
+' --- Relationships ---
+
+Customer -- CUI
+Admin -- AUI
+
+CUI -down-> App : HTTP Requests (REST API)
+AUI -down-> App : HTTP Requests (REST API)
+
+App -- AuthR
+App -- UserR
+App -- BookingR
+App -- AdminR
+
+AuthR -- AuthMW
+UserR -- AuthMW
+BookingR -- AuthMW
+AdminR -- AuthMW
+
+AuthR --> AuthC
+UserR --> UserC
+BookingR --> BookingC
+AdminR --> AdminC
+
+AuthC --> UserM
+UserC --> UserM
+UserC --> BookingM
+BookingC --> BookingM
+AdminC --> BookingM
+AdminC --> UserM
+
+UserM --right--> DB
+BookingM --right--> DB
+
+@enduml

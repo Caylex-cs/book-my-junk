@@ -11,6 +11,7 @@ const createBooking = (userId, junkType, pickupDate, address, price, callback) =
 const getBookingsByUserId = (userId, callback) => {
     const sql = 'SELECT * FROM bookings WHERE userId = ?';
     db.all(sql, [userId], (err, rows) => {
+        console.log('Raw rows from db.all:', rows);
         callback(err, rows);
     });
 };

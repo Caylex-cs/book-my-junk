@@ -1,0 +1,34 @@
+@startuml
+!theme vibrant
+title Booking Sequence Diagram
+
+actor User as "Customer"
+participant Browser as "Frontend (JavaScript)"
+participant BookingController as "Backend (Node.js)"
+participant BookingModel as "Backend Model"
+database Database
+
+User -> Browser: Navigates to 'Book Pickup' page
+Browser -> User: Displays booking form (book-pickup.html)
+
+User -> Browser: Fills out and submits booking form
+Browser -> BookingController: POST /api/bookings with booking data
+activate BookingController
+
+BookingController -> BookingModel: createBooking(userId, junkType, pickupDate, address)
+activate BookingModel
+
+BookingModel -> Database: INSERT INTO bookings (userId, junkType, pickupDate, address, status) VALUES (?, ?, ?, ?, 'pending')
+activate Database
+Database --> BookingModel: Returns success and new booking ID
+deactivate Database
+
+BookingModel --> BookingController: Returns new booking ID
+deactivate BookingModel
+
+BookingController -> Browser: 201 Created response with { message: 'Booking created successfully' }
+deactivate BookingController
+
+Browser -> User: Shows success message and redirects to 'My Bookings' page
+
+@enduml

@@ -1,0 +1,44 @@
+@startuml
+!theme vibrant
+' Layout Improvements
+skinparam nodesep 80
+skinparam ranksep 80
+
+title Customer Booking Management - DFD Level 1
+
+' Define Actors and Data Stores
+actor Customer
+database "Bookings" as BookingsDB
+database "Users" as UsersDB
+
+' Define Processes
+usecase "Create\nBooking" as P1
+usecase "View\nBookings" as P2
+usecase "Cancel\nBooking" as P3
+usecase "Manage\nProfile" as P4
+
+' --- Data Flows from Customer ---
+Customer --> P1 : Booking Details
+Customer --> P2 : View Bookings Request
+Customer --> P3 : Cancellation Request
+Customer --> P4 : Profile Update Details
+
+' --- Data Flows to Customer ---
+P1 --> Customer : Booking Confirmation
+P2 --> Customer : Booking List
+P3 --> Customer : Cancellation Confirmation
+P4 --> Customer : Updated Profile
+
+' --- Data Flows to/from Data Stores ---
+P1 --> BookingsDB : New Booking Record
+P1 --> UsersDB : User ID for Validation
+
+P2 --> BookingsDB : Query for Bookings
+BookingsDB --> P2 : User's Booking Records
+
+P3 --> BookingsDB : Update Booking Status (Cancelled)
+
+P4 --> UsersDB : Updated User Information
+UsersDB --> P4 : User Profile Data
+
+@enduml

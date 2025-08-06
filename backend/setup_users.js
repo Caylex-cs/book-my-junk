@@ -48,7 +48,10 @@ db.serialize(() => {
 
             // Add dummy bookings for Consumer 1
             db.run('INSERT INTO bookings (userId, junkType, pickupDate, address, status, price) VALUES (?, ?, ?, ?, ?, ?)', [consumer1UserId, 'Old Furniture', '2025-07-10T10:00:00', '123 Main St, Anytown', 'pending', 80]);
-            db.run('INSERT INTO bookings (userId, junkType, pickupDate, address, status, price) VALUES (?, ?, ?, ?, ?, ?)', [consumer1UserId, 'Electronics Waste', '2025-07-04T14:30:00', '123 Main St, Anytown', 'completed', 60]); // Completed today
+            db.run('INSERT INTO bookings (userId, junkType, pickupDate, address, status, price) VALUES (?, ?, ?, ?, ?, ?)', [consumer1UserId, 'Electronics Waste', '2025-07-04T14:30:00', '123 Main St, Anytown', 'completed', 60]);
+            db.run('INSERT INTO bookings (userId, junkType, pickupDate, address, status, price) VALUES (?, ?, ?, ?, ?, ?)', [consumer1UserId, 'Books', '2025-08-15T11:00:00', '123 Main St, Anytown', 'confirmed', 30]);
+            db.run('INSERT INTO bookings (userId, junkType, pickupDate, address, status, price) VALUES (?, ?, ?, ?, ?, ?)', [consumer1UserId, 'Clothes', '2025-06-20T09:00:00', '123 Main St, Anytown', 'completed', 25]);
+            db.run('INSERT INTO bookings (userId, junkType, pickupDate, address, status, price) VALUES (?, ?, ?, ?, ?, ?)', [consumer1UserId, 'Appliances', '2025-08-20T14:00:00', '123 Main St, Anytown', 'pending', 100]);
         }
     });
 
@@ -66,7 +69,8 @@ db.serialize(() => {
 
             // Add dummy bookings for Consumer 2
             db.run('INSERT INTO bookings (userId, junkType, pickupDate, address, status, price) VALUES (?, ?, ?, ?, ?, ?)', [consumer2UserId, 'Plastic Bottles', '2025-07-12T09:00:00', '456 Oak Ave, Otherville', 'confirmed', 40]);
-            db.run('INSERT INTO bookings (userId, junkType, pickupDate, address, status, price) VALUES (?, ?, ?, ?, ?, ?)', [consumer2UserId, 'Garden Waste', '2025-07-01T11:00:00', '456 Oak Ave, Otherville', 'cancelled', 20], function(err) {
+            db.run('INSERT INTO bookings (userId, junkType, pickupDate, address, status, price) VALUES (?, ?, ?, ?, ?, ?)', [consumer2UserId, 'Garden Waste', '2025-07-01T11:00:00', '456 Oak Ave, Otherville', 'cancelled', 20]);
+            db.run('INSERT INTO bookings (userId, junkType, pickupDate, address, status, price) VALUES (?, ?, ?, ?, ?, ?)', [consumer2UserId, 'Metal Scrap', '2025-08-01T10:00:00', '456 Oak Ave, Otherville', 'pending', 50], function(err) {
                 if (err) {
                     console.error('Error inserting consumer 2 booking:', err.message);
                 }

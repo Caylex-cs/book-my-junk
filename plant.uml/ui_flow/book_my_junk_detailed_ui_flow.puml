@@ -1,0 +1,111 @@
+@startuml
+!theme vibrant
+title Book My Junk - Detailed UI Flow Diagram
+
+start
+
+partition "Guest" {
+  :User visits Home Page (index.html);
+  if (User wants to sign up?) then (yes)
+    :Clicks "Sign Up" button;
+    :Navigates to Signup Page (customer/signup.html);
+    :Fills out signup form (name, email, password);
+    :Submits form;
+    if (Signup successful?) then (yes)
+      note right: API call to POST /api/auth/signup
+      :Redirected to Login Page (customer/login.html);
+    else (no)
+      :Shows error on Signup Page;
+      stop
+    endif
+  else (no)
+    :Clicks "Login" button;
+  endif
+}
+
+partition "Login" {
+  if (is Admin?) then (yes)
+    :Navigates to Admin Login Page (admin/login.html);
+    :Enters admin credentials;
+    :Submits login form;
+    if (Admin login successful?) then (yes)
+      note right: API call to POST /api/auth/admin/login
+      :Redirected to Admin Dashboard;
+    else (no)
+      :Shows error on Admin Login Page;
+      stop
+    endif
+  else (no)
+    :Navigates to Customer Login Page (customer/login.html);
+    :Enters customer credentials;
+    :Submits login form;
+    if (Customer login successful?) then (yes)
+      note right: API call to POST /api/auth/customer/login
+      :Redirected to Customer Dashboard;
+    else (no)
+      :Shows error on Customer Login Page;
+      stop
+    endif
+  endif
+}
+
+if (User is Admin?) then (yes)
+  partition "Admin Flow" {
+    :Admin Dashboard (admin/dashboard.html);
+    note right: API call to GET /api/admin/dashboard-stats
+    :Views dashboard with stats and recent bookings;
+    if (Wants to manage bookings?) then (yes)
+      :Navigates to Manage Bookings Page (admin/bookings.html);
+      note right: API call to GET /api/admin/bookings
+      :Views all bookings;
+      :Can filter and search bookings;
+      :Can update booking status;
+      note right: API call to PUT /api/admin/bookings/:id
+    else (no)
+      :Logs out;
+      :Redirected to Home Page;
+      stop
+    endif
+  }
+else (no)
+  partition "Customer Flow" {
+    :Customer Dashboard (customer/dashboard.html);
+    note right: API calls to GET /api/users/profile, /api/users/dashboard-stats, /api/bookings
+    :Views personal dashboard with stats and upcoming pickups;
+    if (Wants to book a pickup?) then (yes)
+      :Navigates to Book Pickup Page (customer/book-pickup.html);
+      :Fills out booking form (address, date, time, junk type, etc.);
+      :Submits booking;
+      note right: API call to POST /api/bookings
+      if (Booking successful?) then (yes)
+        :Redirected to My Bookings Page (customer/bookings.html);
+      else (no)
+        :Shows error on Booking Page;
+      endif
+    else (no)
+      if (Wants to see bookings?) then (yes)
+        :Navigates to My Bookings Page (customer/bookings.html);
+        note right: API call to GET /api/bookings
+        :Views list of personal bookings;
+        :Can filter and search bookings;
+        :Can cancel a booking;
+        note right: API call to DELETE /api/bookings/:id
+      else (no)
+        :Navigates to Profile Page (customer/profile.html);
+        note right: API call to GET /api/users/profile
+        :Views and edits profile information;
+        note right: API call to PUT /api/users/profile
+        :Can change password;
+        note right: API call to PUT /api/users/password
+        :Can delete account;
+        note right: API call to DELETE /api/users
+      endif
+    endif
+    :Logs out;
+    :Redirected to Home Page;
+  }
+endif
+
+stop
+
+@enduml

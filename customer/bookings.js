@@ -6,13 +6,40 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    const bookingsTableBody = document.querySelector('.table tbody');
-    const cancelModal = document.getElementById('cancelModal');
     let bookingToCancelId = null;
 
-    const fetchBookings = async () => {
+    const bookingsTableBody = document.querySelector('.table tbody');
+    const cancelModal = document.getElementById('cancelModal');
+
+    // Get filter elements
+    const searchInput = document.getElementById('search');
+    const statusFilter = document.getElementById('status-filter');
+    const dateFilter = document.getElementById('date-filter');
+
+    // Add event listeners for filters
+    searchInput.addEventListener('input', fetchBookings);
+    statusFilter.addEventListener('change', fetchBookings);
+    dateFilter.addEventListener('change', fetchBookings);
+
+    // Initial fetch
+    fetchBookings();
+
+    async function fetchBookings() {
         try {
-            const response = await fetch('http://localhost:5001/api/bookings', {
+            const queryParams = new URLSearchParams();
+            if (searchInput.value) {
+                queryParams.append('search', searchInput.value);
+            }
+            if (statusFilter.value) {
+                queryParams.append('status', statusFilter.value);
+            }
+            if (dateFilter.value) {
+                queryParams.append('dateFilter', dateFilter.value);
+            }
+
+            const url = `http://localhost:5001/api/bookings?${queryParams.toString()}`;
+
+            const response = await fetch(url, {
                 headers: {
                     'x-access-token': token
                 }
@@ -21,6 +48,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (response.ok) {
                 bookingsTableBody.innerHTML = ''; // Clear existing data
+
+                // Sort bookings by pickupDate in descending order (most recent first)
+                data.sort((a, b) => new Date(b.pickupDate) - new Date(a.pickupDate));
+
                 data.forEach(booking => {
                     const row = `
                         <tr>
@@ -33,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <td>${booking.junkType}</td>
                             <td>${booking.address}</td>
                             <td><span class="badge badge-${booking.status.toLowerCase()}">${booking.status}</span></td>
-                            <td>$0</td> <!-- Price is not implemented in backend -->
+                            <td>${booking.price ? booking.price.toFixed(2) : 'N/A'}</td>
                             <td>
                                 ${booking.status === 'pending' || booking.status === 'confirmed' ?
                                     `<button class="btn btn-small btn-danger cancel-btn" data-id="${booking.id}">Cancel</button>` :

@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class="pickup-item">
                         <div class="pickup-info">
                             <h4>${booking.junkType}</h4>
-                            <p>📅 ${new Date(booking.pickupDate).toLocaleDateString()} • ${booking.status}</p>
+                            <p>📅 ${new Date(booking.pickupDate).toLocaleDateString()} • ${new Date(booking.pickupDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                             <p>📍 ${booking.address}</p>
                             ${booking.price ? `<p>💰 ${booking.price.toFixed(2)}</p>` : ''}
                         </div>
@@ -59,9 +59,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                 `;
 
-                if (booking.status === 'pending' || booking.status === 'confirmed') {
+                const now = new Date();
+                const pickupDate = new Date(booking.pickupDate);
+
+                if (pickupDate > now && (booking.status === 'pending' || booking.status === 'confirmed')) {
                     upcomingPickupsContainer.innerHTML += pickupItem;
-                } else {
+                } else if (pickupDate <= now && (booking.status === 'completed' || booking.status === 'cancelled')) {
                     recentPickupHistoryContainer.innerHTML += pickupItem;
                 }
             });

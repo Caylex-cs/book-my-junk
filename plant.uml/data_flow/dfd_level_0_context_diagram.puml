@@ -1,0 +1,38 @@
+@startuml
+!theme vibrant
+' Layout Improvements
+skinparam nodesep 100
+skinparam ranksep 100
+
+title Book My Junk - Context Diagram (DFD Level 0)
+
+left to right direction
+
+actor Customer
+actor Admin
+
+rectangle "Book My Junk System" as System
+
+' --- Customer Data Flows ---
+Customer --> System : Signup Details
+Customer --> System : Login Credentials
+Customer --> System : Booking Request
+Customer --> System : Profile Update
+Customer --> System : View Dashboard/Bookings Request
+
+System --> Customer : Account Confirmation
+System --> Customer : Session Token
+System --> Customer : Booking Confirmation & Status
+System --> Customer : Profile Information
+System --> Customer : Dashboard & Booking Data
+
+' --- Admin Data Flows ---
+Admin --> System : Login Credentials
+Admin --> System : Booking Status Update
+Admin --> System : View Dashboard/Bookings Request
+
+System --> Admin : Session Token
+System --> Admin : All Bookings Data
+System --> Admin : Dashboard Statistics
+
+@enduml
