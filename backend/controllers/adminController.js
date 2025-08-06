@@ -78,7 +78,60 @@ const updateBookingStatus = (req, res) => {
     });
 };
 
+const getDashboardStats = (req, res) => {
+    db.all('SELECT * FROM bookings', (err, bookings) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error fetching dashboard stats', error: err });
+        }
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const endOfToday = new Date(today);
+        endOfToday.setDate(today.getDate() + 1);
+
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - today.getDay()); // Sunday
+        startOfWeek.setHours(0, 0, 0, 0);
+
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 7);
+
+        let totalPickupsToday = 0;
+        let pendingRequests = 0;
+        let completedThisWeek = 0;
+        let revenueThisWeek = 0;
+
+        bookings.forEach(booking => {
+            const pickupDate = new Date(booking.pickupDate);
+
+            // Total Pickups Today
+            if (pickupDate >= today && pickupDate < endOfToday) {
+                totalPickupsToday++;
+            }
+
+            // Pending Requests
+            if (booking.status === 'pending') {
+                pendingRequests++;
+            }
+
+            // Completed This Week & Revenue This Week
+            if (booking.status === 'completed' && pickupDate >= startOfWeek && pickupDate < endOfWeek) {
+                completedThisWeek++;
+                revenueThisWeek += booking.price || 0;
+            }
+        });
+
+        res.status(200).json({
+            totalPickupsToday,
+            pendingRequests,
+            completedThisWeek,
+            revenueThisWeek: revenueThisWeek.toFixed(2)
+        });
+    });
+};
+
 module.exports = {
     getAllBookings,
-    updateBookingStatus
+    updateBookingStatus,
+    getDashboardStats
 };

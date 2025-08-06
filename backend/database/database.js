@@ -22,6 +22,7 @@ db.serialize(() => {
         pickupDate TEXT NOT NULL,
         address TEXT NOT NULL,
         status TEXT NOT NULL DEFAULT 'pending',
+        price REAL,
         FOREIGN KEY (userId) REFERENCES users (id)
     )`);
 });

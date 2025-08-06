@@ -6,5 +6,6 @@ const { protect, isAdmin } = require('../middleware/authMiddleware.js');
 
 router.get('/bookings', protect, isAdmin, adminController.getAllBookings);
 router.put('/bookings/:id', protect, isAdmin, adminController.updateBookingStatus);
+router.get('/dashboard-stats', protect, isAdmin, adminController.getDashboardStats);
 
 module.exports = router;

@@ -47,8 +47,8 @@ db.serialize(() => {
             console.log(`Consumer user '${consumer1Username}' created with ID: ${consumer1UserId}`);
 
             // Add dummy bookings for Consumer 1
-            db.run('INSERT INTO bookings (userId, junkType, pickupDate, address, status) VALUES (?, ?, ?, ?, ?)', [consumer1UserId, 'Old Furniture', '2025-07-10T10:00:00', '123 Main St, Anytown', 'pending']);
-            db.run('INSERT INTO bookings (userId, junkType, pickupDate, address, status) VALUES (?, ?, ?, ?, ?)', [consumer1UserId, 'Electronics Waste', '2025-07-04T14:30:00', '123 Main St, Anytown', 'completed']); // Completed today
+            db.run('INSERT INTO bookings (userId, junkType, pickupDate, address, status, price) VALUES (?, ?, ?, ?, ?, ?)', [consumer1UserId, 'Old Furniture', '2025-07-10T10:00:00', '123 Main St, Anytown', 'pending', 80]);
+            db.run('INSERT INTO bookings (userId, junkType, pickupDate, address, status, price) VALUES (?, ?, ?, ?, ?, ?)', [consumer1UserId, 'Electronics Waste', '2025-07-04T14:30:00', '123 Main St, Anytown', 'completed', 60]); // Completed today
         }
     });
 
@@ -65,8 +65,8 @@ db.serialize(() => {
             console.log(`Consumer user '${consumer2Username}' created with ID: ${consumer2UserId}`);
 
             // Add dummy bookings for Consumer 2
-            db.run('INSERT INTO bookings (userId, junkType, pickupDate, address, status) VALUES (?, ?, ?, ?, ?)', [consumer2UserId, 'Plastic Bottles', '2025-07-12T09:00:00', '456 Oak Ave, Otherville', 'confirmed']);
-            db.run('INSERT INTO bookings (userId, junkType, pickupDate, address, status) VALUES (?, ?, ?, ?, ?)', [consumer2UserId, 'Garden Waste', '2025-07-01T11:00:00', '456 Oak Ave, Otherville', 'cancelled'], function(err) {
+            db.run('INSERT INTO bookings (userId, junkType, pickupDate, address, status, price) VALUES (?, ?, ?, ?, ?, ?)', [consumer2UserId, 'Plastic Bottles', '2025-07-12T09:00:00', '456 Oak Ave, Otherville', 'confirmed', 40]);
+            db.run('INSERT INTO bookings (userId, junkType, pickupDate, address, status, price) VALUES (?, ?, ?, ?, ?, ?)', [consumer2UserId, 'Garden Waste', '2025-07-01T11:00:00', '456 Oak Ave, Otherville', 'cancelled', 20], function(err) {
                 if (err) {
                     console.error('Error inserting consumer 2 booking:', err.message);
                 }

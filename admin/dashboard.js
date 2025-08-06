@@ -5,6 +5,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    // Fetch dashboard stats
+    try {
+        const statsResponse = await fetch('http://localhost:5001/api/admin/dashboard-stats', {
+            headers: {
+                'x-access-token': token
+            }
+        });
+        const statsData = await statsResponse.json();
+
+        if (statsResponse.ok) {
+            document.getElementById('totalPickupsToday').textContent = statsData.totalPickupsToday;
+            document.getElementById('pendingRequests').textContent = statsData.pendingRequests;
+            document.getElementById('completedThisWeek').textContent = statsData.completedThisWeek;
+            document.getElementById('revenueThisWeek').textContent = `${statsData.revenueThisWeek}`;
+        } else {
+            console.error('Failed to fetch admin dashboard stats:', statsData.message);
+        }
+    } catch (error) {
+        console.error('Error fetching admin dashboard stats:', error);
+    }
+
     // Fetch all bookings for admin dashboard
     try {
         const response = await fetch('http://localhost:5001/api/admin/bookings', {
@@ -20,37 +41,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             recentBookingsContainer.innerHTML = '';
             scheduleTableBody.innerHTML = '';
 
-            let pendingCount = 0;
-            let completedTodayCount = 0;
-            let completedThisWeekCount = 0;
-
             const now = new Date(); // Current date and time
             const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const startOfOneWeekAgo = new Date(startOfToday);
-            startOfOneWeekAgo.setDate(startOfToday.getDate() - 7);
-
-            console.log('Fetched bookings:', bookings); // Debug: See all fetched bookings
 
             bookings.forEach(booking => {
                 const pickupDate = new Date(booking.pickupDate);
 
-                // Update stats
-                if (booking.status === 'pending') {
-                    pendingCount++;
-                }
-                if (booking.status === 'completed') {
-                    if (pickupDate.toDateString() === startOfToday.toDateString()) {
-                        completedTodayCount++;
-                    }
-                    // For "This Week": from start of 7 days ago up to the current moment
-                    if (pickupDate >= startOfOneWeekAgo && pickupDate <= now) {
-                        completedThisWeekCount++;
-                    }
-                }
-
                 // Populate Recent Bookings (all pending/confirmed)
                 if (booking.status === 'pending' || booking.status === 'confirmed') {
-                    console.log('Adding to recent bookings:', booking); // Debug: See what's added
                     const recentBookingItem = `
                         <div class="booking-item">
                             <div class="booking-info">
@@ -68,7 +66,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 // Populate Today's Schedule (all bookings for today)
                 if (pickupDate.toDateString() === startOfToday.toDateString()) {
-                    console.log('Adding to today's schedule:', booking); // Debug: See what's added
                     const scheduleRow = `
                         <tr>
                             <td>${pickupDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
@@ -84,11 +81,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     scheduleTableBody.innerHTML += scheduleRow;
                 }
             });
-
-            document.getElementById('totalPickupsToday').textContent = completedTodayCount;
-            document.getElementById('pendingRequests').textContent = pendingCount;
-            document.getElementById('completedThisWeek').textContent = completedThisWeekCount;
-            // Revenue is not implemented in backend yet
 
         } else {
             console.error('Failed to fetch admin bookings:', bookings.message);

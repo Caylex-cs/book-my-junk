@@ -6,42 +6,43 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    // Fetch user profile
+    // Fetch user profile and dashboard stats
     try {
-        const userResponse = await fetch('http://localhost:5001/api/users/profile', {
-            headers: {
-                'x-access-token': token
-            }
-        });
+        const [userResponse, statsResponse, bookingsResponse] = await Promise.all([
+            fetch('http://localhost:5001/api/users/profile', {
+                headers: { 'x-access-token': token }
+            }),
+            fetch('http://localhost:5001/api/users/dashboard-stats', {
+                headers: { 'x-access-token': token }
+            }),
+            fetch('http://localhost:5001/api/bookings', {
+                headers: { 'x-access-token': token }
+            })
+        ]);
+
         const userData = await userResponse.json();
+        const statsData = await statsResponse.json();
+        const bookingsData = await bookingsResponse.json();
+
         if (userResponse.ok) {
             document.querySelector('.dashboard-greeting').textContent = `Welcome back, ${userData.username}!`;
         } else {
             console.error('Failed to fetch user profile:', userData.message);
-            // Optionally redirect to login if token is invalid
-            // window.location.href = 'login.html';
         }
-    } catch (error) {
-        console.error('Error fetching user profile:', error);
-    }
 
-    // Fetch user bookings
-    try {
-        const bookingsResponse = await fetch('http://localhost:5001/api/bookings', {
-            headers: {
-                'x-access-token': token
-            }
-        });
-        const bookingsData = await bookingsResponse.json();
+        if (statsResponse.ok) {
+            document.querySelector('.stat-number:nth-child(1)').textContent = statsData.upcomingPickups;
+            document.querySelector('.stat-number:nth-child(2)').textContent = statsData.totalPickups;
+            document.querySelector('.stat-number:nth-child(3)').textContent = `${statsData.totalSpent}`;
+        } else {
+            console.error('Failed to fetch dashboard stats:', statsData.message);
+        }
 
         if (bookingsResponse.ok) {
             const upcomingPickupsContainer = document.querySelector('.upcoming-pickups');
             const recentPickupHistoryContainer = document.querySelector('.pickup-history');
             upcomingPickupsContainer.innerHTML = ''; // Clear existing dummy data
             recentPickupHistoryContainer.innerHTML = ''; // Clear existing dummy data
-
-            let upcomingCount = 0;
-            let totalCount = bookingsData.length;
 
             bookingsData.forEach(booking => {
                 const pickupItem = `
@@ -50,6 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <h4>${booking.junkType}</h4>
                             <p>📅 ${new Date(booking.pickupDate).toLocaleDateString()} • ${booking.status}</p>
                             <p>📍 ${booking.address}</p>
+                            ${booking.price ? `<p>💰 ${booking.price.toFixed(2)}</p>` : ''}
                         </div>
                         <div class="pickup-status">
                             <span class="badge badge-${booking.status.toLowerCase()}">${booking.status}</span>
@@ -59,21 +61,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 if (booking.status === 'pending' || booking.status === 'confirmed') {
                     upcomingPickupsContainer.innerHTML += pickupItem;
-                    upcomingCount++;
                 } else {
                     recentPickupHistoryContainer.innerHTML += pickupItem;
                 }
             });
-
-            document.querySelector('.stat-number:nth-child(1)').textContent = upcomingCount;
-            document.querySelector('.stat-number:nth-child(2)').textContent = totalCount;
-            // Total Spent is not implemented in backend yet, so it remains dummy
-
         } else {
             console.error('Failed to fetch bookings:', bookingsData.message);
         }
     } catch (error) {
-        console.error('Error fetching bookings:', error);
+        console.error('Error fetching dashboard data:', error);
+        // Optionally redirect to login if token is invalid or network error
+        // window.location.href = 'login.html';
     }
 
     // Logout functionality

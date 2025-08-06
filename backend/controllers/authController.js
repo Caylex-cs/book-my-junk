@@ -50,6 +50,9 @@ const customerLogin = (req, res) => {
             return res.status(401).json({ message: 'Authentication failed. User not found.' });
         }
 
+        console.log('User object in customerLogin:', user);
+        console.log('User role in customerLogin:', user.role);
+
         if (user.role !== 'customer') {
             return res.status(403).json({ message: 'Authentication failed. Not a customer.' });
         }

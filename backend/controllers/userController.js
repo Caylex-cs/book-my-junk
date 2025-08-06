@@ -1,5 +1,6 @@
 
 const User = require('../models/user.js');
+const Booking = require('../models/booking.js');
 const bcrypt = require('bcryptjs');
 
 const getUserProfile = (req, res) => {
@@ -61,9 +62,35 @@ const deleteUserAccount = (req, res) => {
     });
 };
 
+const getDashboardStats = (req, res) => {
+    Booking.getBookingsByUserId(req.userId, (err, bookings) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error fetching dashboard stats', error: err });
+        }
+
+        let totalPickups = bookings.length;
+        let upcomingPickups = 0;
+        let totalSpent = 0;
+
+        bookings.forEach(booking => {
+            if (booking.status === 'pending' || booking.status === 'confirmed') {
+                upcomingPickups++;
+            }
+            totalSpent += booking.price || 0; // Ensure price is a number, default to 0 if null/undefined
+        });
+
+        res.status(200).json({
+            totalPickups,
+            upcomingPickups,
+            totalSpent: totalSpent.toFixed(2) // Format to 2 decimal places
+        });
+    });
+};
+
 module.exports = {
     getUserProfile,
     updateUserProfile,
     changePassword,
-    deleteUserAccount
+    deleteUserAccount,
+    getDashboardStats
 };

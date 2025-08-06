@@ -1,9 +1,9 @@
 
 const db = require('../database/database.js');
 
-const createBooking = (userId, junkType, pickupDate, address, callback) => {
-    const sql = 'INSERT INTO bookings (userId, junkType, pickupDate, address) VALUES (?, ?, ?, ?)';
-    db.run(sql, [userId, junkType, pickupDate, address], function(err) {
+const createBooking = (userId, junkType, pickupDate, address, price, callback) => {
+    const sql = 'INSERT INTO bookings (userId, junkType, pickupDate, address, price) VALUES (?, ?, ?, ?, ?)';
+    db.run(sql, [userId, junkType, pickupDate, address, price], function(err) {
         callback(err, { id: this.lastID });
     });
 };
@@ -15,9 +15,9 @@ const getBookingsByUserId = (userId, callback) => {
     });
 };
 
-const updateBooking = (bookingId, userId, junkType, pickupDate, address, status, callback) => {
-    const sql = 'UPDATE bookings SET junkType = ?, pickupDate = ?, address = ?, status = ? WHERE id = ? AND userId = ?';
-    db.run(sql, [junkType, pickupDate, address, status, bookingId, userId], function(err) {
+const updateBooking = (bookingId, userId, junkType, pickupDate, address, status, price, callback) => {
+    const sql = 'UPDATE bookings SET junkType = ?, pickupDate = ?, address = ?, status = ?, price = ? WHERE id = ? AND userId = ?';
+    db.run(sql, [junkType, pickupDate, address, status, price, bookingId, userId], function(err) {
         callback(err, { changes: this.changes });
     });
 };
