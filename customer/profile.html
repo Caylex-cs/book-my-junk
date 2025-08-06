@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - BookMyJunk</title>
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/components.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>BookMyJunk</h1>
+            </div>
+            <div class="nav-links">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="book-pickup.html" class="nav-link">Book Pickup</a>
+                <a href="bookings.html" class="nav-link">My Bookings</a>
+                <a href="profile.html" class="nav-link active">Profile</a>
+                <a href="../index.html" class="nav-link">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-greeting">Profile Settings</h1>
+            <p class="dashboard-subtitle">Manage your account information</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Personal Information</h3>
+                </div>
+                <form class="profile-form">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" id="name" class="form-input" value="John Doe" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" id="email" class="form-input" value="john.doe@example.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="tel" id="phone" class="form-input" value="+1 (555) 123-4567">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address" class="form-label">Default Address</label>
+                        <textarea id="address" class="form-input form-textarea">123 Main St, City, State 12345</textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Change Password</h3>
+                </div>
+                <form class="password-form">
+                    <div class="form-group">
+                        <label for="current-password" class="form-label">Current Password</label>
+                        <input type="password" id="current-password" class="form-input" placeholder="Enter current password" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-password" class="form-label">New Password</label>
+                        <input type="password" id="new-password" class="form-input" placeholder="Enter new password" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirm-new-password" class="form-label">Confirm New Password</label>
+                        <input type="password" id="confirm-new-password" class="form-input" placeholder="Confirm new password" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Change Password</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 2rem;">
+            <div class="card-header">
+                <h3 class="card-title">Account Statistics</h3>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Total Pickups</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Upcoming Pickups</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$240</div>
+                    <div class="stat-label">Total Spent</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Dec 2024</div>
+                    <div class="stat-label">Member Since</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 2rem; border: 1px solid #fee2e2; background-color: #fef2f2;">
+            <div class="card-header">
+                <h3 class="card-title" style="color: #dc2626;">Danger Zone</h3>
+            </div>
+            <div class="danger-zone">
+                <p style="color: #dc2626; margin-bottom: 1rem;">
+                    <strong>Warning:</strong> Deleting your account will permanently remove all your data, including booking history and personal information. This action cannot be undone.
+                </p>
+                <button class="btn btn-danger" onclick="window.location.href='signup.html'">Delete Account</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Delete Account Confirmation Modal -->
+    <div id="deleteModal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Delete Account</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="color: #dc2626; margin-bottom: 1rem;">
+                    <strong>This action cannot be undone.</strong>
+                </p>
+                <p>Are you absolutely sure you want to delete your account? This will:</p>
+                <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                    <li>Permanently delete all your personal information</li>
+                    <li>Remove all your booking history</li>
+                    <li>Cancel any upcoming pickups</li>
+                    <li>Delete your account credentials</li>
+                </ul>
+                <div class="form-group">
+                    <label for="delete-confirmation" class="form-label">Type "DELETE" to confirm</label>
+                    <input type="text" id="delete-confirmation" class="form-input" placeholder="Type DELETE to confirm">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="window.location.href='profile.html'">Cancel</button>
+                <button class="btn btn-danger" disabled id="confirmDeleteBtn" onclick="window.location.href='../index.html'">Delete Account</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .profile-form,
+        .password-form {
+            padding: 0;
+        }
+        
+        .danger-zone {
+            padding: 0;
+        }
+        
+        .modal-body ul {
+            color: #374151;
+        }
+        
+        .modal-body ul li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+    <script src="profile.js"></script>
+</body>
+</html> 

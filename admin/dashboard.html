@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - BookMyJunk</title>
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/components.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand">BookMyJunk Admin</div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="sidebar-link active">
+                📊 Dashboard
+            </a>
+            <a href="bookings.html" class="sidebar-link">
+                📋 View Bookings
+            </a>
+            <a href="users.html" class="sidebar-link">
+                👥 Users
+            </a>
+            <a href="junk-types.html" class="sidebar-link">
+                🗂️ Junk Types
+            </a>
+            <a href="../index.html" class="sidebar-link">
+                🚪 Logout
+            </a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="content-header">
+            <h1>Admin Dashboard</h1>
+            <p>Welcome back, Admin! Here's an overview of your junk pickup service.</p>
+        </div>
+
+        <div class="content-body">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalPickupsToday">24</div>
+                    <div class="stat-label">Total Pickups Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="pendingRequests">8</div>
+                    <div class="stat-label">Pending Requests</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="completedThisWeek">156</div>
+                    <div class="stat-label">Completed This Week</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$3,240</div>
+                    <div class="stat-label">Revenue This Week</div>
+                </div>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Bookings</h3>
+                    </div>
+                    <div class="recent-bookings">
+                        <div class="booking-item">
+                            <div class="booking-info">
+                                <h4>John Doe</h4>
+                                <p>Furniture Pickup • Dec 15, 2:00 PM</p>
+                                <p>📍 123 Main St, City, State</p>
+                            </div>
+                            <div class="booking-status">
+                                <span class="badge badge-confirmed">Confirmed</span>
+                            </div>
+                        </div>
+                        <div class="booking-item">
+                            <div class="booking-info">
+                                <h4>Jane Smith</h4>
+                                <p>Electronics Pickup • Dec 15, 3:30 PM</p>
+                                <p>📍 456 Oak Ave, City, State</p>
+                            </div>
+                            <div class="booking-status">
+                                <span class="badge badge-pending">Pending</span>
+                            </div>
+                        </div>
+                        <div class="booking-item">
+                            <div class="booking-info">
+                                <h4>Mike Johnson</h4>
+                                <p>Plastic Waste • Dec 15, 4:00 PM</p>
+                                <p>📍 789 Pine St, City, State</p>
+                            </div>
+                            <div class="booking-status">
+                                <span class="badge badge-pending">Pending</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <a href="bookings.html" class="btn btn-secondary">View All Bookings</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Quick Actions</h3>
+                    </div>
+                    <div class="quick-actions">
+                        <a href="bookings.html" class="action-item">
+                            <div class="action-icon">📋</div>
+                            <div class="action-content">
+                                <h4>Manage Bookings</h4>
+                                <p>View and update booking status</p>
+                            </div>
+                        </a>
+                        <a href="users.html" class="action-item">
+                            <div class="action-icon">👥</div>
+                            <div class="action-content">
+                                <h4>User Management</h4>
+                                <p>Manage customer accounts</p>
+                            </div>
+                        </a>
+                        <a href="junk-types.html" class="action-item">
+                            <div class="action-icon">🗂️</div>
+                            <div class="action-content">
+                                <h4>Junk Types</h4>
+                                <p>Configure pickup categories</p>
+                            </div>
+                        </a>
+                        <a href="#" class="action-item">
+                            <div class="action-icon">📊</div>
+                            <div class="action-content">
+                                <h4>Reports</h4>
+                                <p>View analytics and reports</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 2rem;">
+                <div class="card-header">
+                    <h3 class="card-title">Today's Schedule</h3>
+                </div>
+                <div class="schedule-table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Customer</th>
+                                <th>Junk Type</th>
+                                <th>Address</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>9:00 AM</td>
+                                <td>Alice Brown</td>
+                                <td>Furniture</td>
+                                <td>321 Elm St, City, State</td>
+                                <td><span class="badge badge-completed">Completed</span></td>
+                                <td>
+                                    <button class="btn btn-small btn-secondary">View</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>10:30 AM</td>
+                                <td>Bob Wilson</td>
+                                <td>Electronics</td>
+                                <td>654 Maple Dr, City, State</td>
+                                <td><span class="badge badge-completed">Completed</span></td>
+                                <td>
+                                    <button class="btn btn-small btn-secondary">View</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2:00 PM</td>
+                                <td>John Doe</td>
+                                <td>Furniture</td>
+                                <td>123 Main St, City, State</td>
+                                <td><span class="badge badge-confirmed">Confirmed</span></td>
+                                <td>
+                                    <button class="btn btn-small btn-primary">Update</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3:30 PM</td>
+                                <td>Jane Smith</td>
+                                <td>Electronics</td>
+                                <td>456 Oak Ave, City, State</td>
+                                <td><span class="badge badge-pending">Pending</span></td>
+                                <td>
+                                    <button class="btn btn-small btn-primary">Confirm</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .booking-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .booking-item:last-child {
+            border-bottom: none;
+        }
+        
+        .booking-info h4 {
+            margin-bottom: 0.25rem;
+            color: #111827;
+        }
+        
+        .booking-info p {
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .booking-status {
+            flex-shrink: 0;
+        }
+        
+        .recent-bookings {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .action-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+        
+        .action-item:hover {
+            background-color: #f9fafb;
+            border-color: #10b981;
+            transform: translateY(-2px);
+        }
+        
+        .action-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+        
+        .action-content h4 {
+            margin-bottom: 0.25rem;
+            color: #111827;
+        }
+        
+        .action-content p {
+            margin: 0;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .schedule-table {
+            overflow-x: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script src="dashboard.js"></script>
+</body>
+</html> 

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - BookMyJunk</title>
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/components.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1 class="auth-title">Admin Login</h1>
+                <p class="auth-subtitle">Access the BookMyJunk admin panel</p>
+            </div>
+            <div id="error-message" class="error-message" style="display: none;"></div>
+            
+            <form class="auth-form">
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" id="email" class="form-input" placeholder="Enter admin email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="Enter admin password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login to Admin Panel</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p style="margin: 0;">
+                    <a href="../index.html" class="auth-link">← Back to Home</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <script src="login.js"></script>
+</body>
+</html> 
